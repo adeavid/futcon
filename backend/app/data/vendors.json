@@ -1,0 +1,254 @@
+[
+  {
+    "id": "24c33ad7-1cf9-4b44-9547-6057fb1500c7",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": -3062985600000,
+    "vendor": "Nokia",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "60 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "150 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "350 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "500 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "950 Mbps"
+      }
+    ]
+  },
+  {
+    "id": "d95eda8f-50ec-4be3-8796-cfbd0a82ddc2",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": -2836972800000,
+    "vendor": "Ericsson",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "55 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "140 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "340 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "490 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "900 Mbps"
+      }
+    ]
+  },
+  {
+    "id": "efed6cb3-e250-45f4-a977-e6d3c29b1c4d",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": 547430400000,
+    "vendor": "Huawei",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "65 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "160 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "360 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "510 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "960 Mbps"
+      }
+    ]
+  },
+  {
+    "id": "b87cb642-69b9-4a82-a2ab-9134774985c5",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": -1043961600000,
+    "vendor": "Samsung",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "70 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "170 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "370 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "520 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "970 Mbps"
+      }
+    ]
+  },
+  {
+    "id": "f4b7b4aa-fe23-4d1c-96ec-09fdec733468",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": 485222400000,
+    "vendor": "ZTE",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "75 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "180 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "380 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "530 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "980 Mbps"
+      }
+    ]
+  },
+  {
+    "id": "15b8149b-098b-4256-a598-d3a476cda5dc",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": -189388800000,
+    "vendor": "Cisco",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "80 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "190 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "390 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "540 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "990 Mbps"
+      }
+    ]
+  },
+  {
+    "id": "6f70f99d-df05-447f-807d-fb6988bde608",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": -2786995200000,
+    "vendor": "NEC",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "50 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "130 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "330 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "480 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "890 Mbps"
+      }
+    ]
+  },
+  {
+    "id": "e12d920a-3d89-4a96-a8cc-74e3fcae3261",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": -2508412800000,
+    "vendor": "Alcatel-Lucent",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "58 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "145 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "345 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "495 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "920 Mbps"
+      }
+    ]
+  },
+  {
+    "id": "34d8d0ef-143a-4222-95c6-c222cb11d4cd",
+    "picture": "https://picsum.photos/64/64",
+    "foundationDate": 599616000000,
+    "vendor": "Qualcomm",
+    "antennas": [
+      {
+        "technology": "2G",
+        "speedMbps": "77 Mbps"
+      },
+      {
+        "technology": "3G",
+        "speedMbps": "185 Mbps"
+      },
+      {
+        "technology": "4G",
+        "speedMbps": "385 Mbps"
+      },
+      {
+        "technology": "LTE",
+        "speedMbps": "535 Mbps"
+      },
+      {
+        "technology": "5G",
+        "speedMbps": "985 Mbps"
+      }
+    ]
+  }
+]
