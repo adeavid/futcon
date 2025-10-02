@@ -4,6 +4,7 @@ import React from 'react';
 import type { Vendor } from '../api/vendors';
 import { summarizeVendorSpeeds } from '../lib/vendor';
 import { useVendorsQuery } from '../api/vendors';
+import { Icon } from '../components/icons';
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -112,7 +113,9 @@ const GlobalHero: React.FC = () => {
   if (isLoading) {
     return (
       <div className="grid gap-4 rounded-2xl border border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))] p-5 shadow-sm">
-        <p className="text-sm text-[rgb(var(--text-secondary))]">Calculando métricas globales…</p>
+        <p className="flex items-center gap-2 text-sm text-[rgb(var(--text-secondary))]">
+          <Icon name="spark" className="h-4 w-4" /> Calculando métricas globales…
+        </p>
       </div>
     );
   }
@@ -120,7 +123,9 @@ const GlobalHero: React.FC = () => {
   if (isError || !metrics) {
     return (
       <div className="grid gap-2 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
-        <p>No se pudieron calcular las métricas globales en este momento.</p>
+        <p className="flex items-center gap-2">
+          <Icon name="bolt" className="h-4 w-4" /> No se pudieron calcular las métricas globales en este momento.
+        </p>
       </div>
     );
   }
@@ -128,7 +133,9 @@ const GlobalHero: React.FC = () => {
   return (
     <div className="grid gap-4 rounded-2xl border border-[rgb(var(--border-muted))] bg-gradient-to-r from-sky-500/5 via-transparent to-indigo-500/10 p-6 text-sm shadow-md transition hover:shadow-lg sm:grid-cols-3">
       <div className="space-y-2">
-        <p className="uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">Top vendor</p>
+        <p className="flex items-center gap-2 uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">
+          <Icon name="trophy" className="h-4 w-4" /> Top vendor
+        </p>
         <p className="text-2xl font-semibold text-[rgb(var(--text-primary))]">
           {metrics.topVendor?.name ?? '—'}
         </p>
@@ -137,7 +144,9 @@ const GlobalHero: React.FC = () => {
         </p>
       </div>
       <div className="space-y-2">
-        <p className="uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">Velocidad global</p>
+        <p className="flex items-center gap-2 uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">
+          <Icon name="gauge" className="h-4 w-4" /> Velocidad global
+        </p>
         <p className="text-2xl font-semibold text-[rgb(var(--text-primary))]">
           {metrics.globalAverage.toFixed(1)} Mbps
         </p>
@@ -146,7 +155,9 @@ const GlobalHero: React.FC = () => {
         </p>
       </div>
       <div className="space-y-2">
-        <p className="uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">Brecha de rendimiento</p>
+        <p className="flex items-center gap-2 uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">
+          <Icon name="trendUp" className="h-4 w-4" /> Brecha de rendimiento
+        </p>
         <p className="text-2xl font-semibold text-[rgb(var(--text-primary))]">
           {metrics.variability.toFixed(1)} Mbps
         </p>
@@ -164,10 +175,10 @@ const RouteComponent: React.FC = () => {
       <a href="#contenido" className="skip-link">
         Saltar al contenido principal
       </a>
-      <div className="min-h-screen bg-[rgb(var(--bg-subtle))] text-[rgb(var(--text-primary))] transition-colors">
+      <div className="min-h-screen bg-[rgb(var(--bg-subtle))] pb-16 text-[rgb(var(--text-primary))] transition-colors sm:pb-0">
         <header className="border-b border-[rgb(var(--border-muted))] bg-gradient-to-r from-sky-500/10 via-transparent to-indigo-500/10 backdrop-blur">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5">
-            <div className="flex items-center gap-4">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:py-5">
+            <div className="flex items-center gap-3 md:gap-4">
               <div className="rounded-full bg-sky-500/10 p-2">
                 <span className="text-lg font-semibold text-sky-600 dark:text-sky-400">FC</span>
               </div>
@@ -176,8 +187,8 @@ const RouteComponent: React.FC = () => {
                 <h1 className="text-xl font-semibold">Dashboard de vendors</h1>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <nav aria-label="Navegación principal">
+            <div className="flex items-center gap-3 md:gap-4">
+              <nav aria-label="Navegación principal" className="hidden sm:block">
                 <ul className="flex gap-3 text-sm font-medium">
                   <li>
                     <Link
@@ -206,10 +217,20 @@ const RouteComponent: React.FC = () => {
                 </ul>
               </nav>
               <ThemeToggleButton />
+              <button
+                type="button"
+                className="focus-ring inline-flex sm:hidden"
+                aria-label="Abrir navegación"
+              >
+                <Icon name="bolt" className="h-6 w-6 text-sky-600 dark:text-sky-300" />
+              </button>
             </div>
           </div>
         </header>
-        <main id="contenido" className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[2fr_1fr]">
+        <main
+          id="contenido"
+          className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[2fr_1fr] lg:items-start"
+        >
           <section className="col-span-full">
             <GlobalHero />
           </section>
@@ -242,6 +263,30 @@ const RouteComponent: React.FC = () => {
           </div>
         </footer>
       </div>
+      <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))]/95 p-2 shadow-t-lg backdrop-blur sm:hidden">
+        <ul className="grid grid-cols-2 gap-2 text-sm font-medium text-[rgb(var(--text-secondary))]">
+          <li>
+            <Link
+              to="/"
+              className="focus-ring flex flex-col items-center gap-1 rounded-lg px-3 py-2 transition hover:text-[rgb(var(--text-primary))]"
+              activeProps={{ className: 'bg-sky-500/10 text-sky-600 dark:text-sky-300', 'aria-current': 'page' }}
+            >
+              <Icon name="gauge" className="h-5 w-5" />
+              <span>Global</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/ranking-tecnologia"
+              className="focus-ring flex flex-col items-center gap-1 rounded-lg px-3 py-2 transition hover:text-[rgb(var(--text-primary))]"
+              activeProps={{ className: 'bg-sky-500/10 text-sky-600 dark:text-sky-300', 'aria-current': 'page' }}
+            >
+              <Icon name="antenna" className="h-5 w-5" />
+              <span>Por tecnología</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>
     </ThemeProvider>
   );
 };

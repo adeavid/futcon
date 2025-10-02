@@ -397,6 +397,45 @@ Incorporar una “Vendor Insight Card” con visualización ligera en el detalle
 **Resumen del resultado:** Se incorporó un hero con KPIs (vendor líder, media global, brecha) y una tarjeta “Vendor Insight” con micro-barras por tecnología; se ajustaron degradados, sombras y animaciones suaves. Tests y README actualizados.  
 **Uso dentro del proyecto:** Cambios en `frontend/src/lib/vendor.ts`, nuevo componente `frontend/src/components/VendorInsightCard.tsx`, actualizaciones en `frontend/src/routes/__root.tsx`, `frontend/src/routes/vendor-detail.tsx`, y pruebas `frontend/src/tests/vendor-utils.test.ts`, `frontend/src/tests/vendor-detail.test.tsx`.
 
+## Interacción 6
+**Fecha y hora (Europe/Madrid):** 2025-10-02 04:26  
+**Herramienta / Modelo:** ChatGPT – GPT-5 (Codex TL)  
+**Objetivo:** Hacer la UI totalmente responsive, añadir iconografía ligera y refinar la experiencia móvil con navegación inferior y animaciones suaves  
+**Prompt exacto enviado:**
+```
+Objetivos
+  - Hacer la UI totalmente responsive (breakpoints xs/sm, spacing/typografía
+  adaptables, ver hero, tablas, tarjetas).
+  - Añadir iconos ligeros (Hero KPIs, tarjetas de insight, sidebar) usando
+  Heroicons outline vía componentes SVG propios (sin libs extra).
+  - Mejorar visibilidad mobile: reorganizar grid → una sola columna con tarjetas
+  apiladas, barra inferior de navegación opcional, ajustar tamaños de fuente
+  (base 15px).
+  - Añadir animaciones suaves (hover/focus) y sombras graduales.
+  - Mantener accesibilidad (aria-label en iconos decorativos con `aria-hidden`,
+  focus rings).
+  - Actualizar tests si cambia markup clave (hero/tests de detalle).
+  - Documentar en README la iconografía y el soporte responsive, registrar
+  interacción en PROMPTS.md.
+
+  Archivos a tocar
+  - `frontend/src/routes/__root.tsx` (layout responsivo, iconos en hero/sidebar/
+  nav, nav mobile si procede).
+  - `frontend/src/components/VendorInsightCard.tsx` y `VendorCard.tsx` (iconos y
+  spacing mobile).
+  - `frontend/src/components/VendorTable.tsx`, `TechnologyRankingControls.tsx`,
+  `AntennaList.tsx` (responsivo + iconos donde aplique).
+  - `frontend/src/index.css` (tipografía base, media queries si faltan).
+  - Tests relevantes (`vendor-detail`, `global-ranking`, `technology-ranking`)
+  para confirmar estructura y links siguen accesibles.
+  - README y PROMPTS.md si hay cambios notables.
+
+  Mantén Tailwind; sin dependencias nuevas. Verifica `pnpm test --run`.
+ actualizar luego prompts.md y readme
+```
+**Resumen del resultado:** Se creó un set de iconos SVG, se añadió navegación inferior móvil, se ajustó la tipografía base a 15/16px, se actualizó el hero y tarjetas con iconografía y animaciones, y se reforzó el responsive. README y tests fueron actualizados.  
+**Uso dentro del proyecto:** Nuevo archivo `frontend/src/components/icons.tsx`, cambios en `frontend/src/index.css`, componentes `VendorCard`, `VendorInsightCard`, `TechnologyRankingControls`, `AntennaList`, tabla `VendorTable`, ruta `frontend/src/routes/__root.tsx`, y tests (`frontend/src/tests/vendor-detail.test.tsx`, `frontend/src/tests/vendor-utils.test.tsx`).
+
 ## 📝 Ejemplo de entrada en PROMPTS.md
 ## Interacción 1
 Herramienta/Modelo: ChatGPT – GPT-4o

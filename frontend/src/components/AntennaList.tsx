@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Antenna } from '../api/vendors';
 import { formatSpeed, normalizeTechnology, parseSpeed } from '../lib/vendor';
+import { Icon } from './icons';
 
 interface AntennaListProps {
   antennas: Antenna[];
@@ -22,10 +23,11 @@ export const AntennaList: React.FC<AntennaListProps> = ({ antennas }) => {
   if (sortedAntennas.length === 0) {
     return (
       <div
-        className="rounded-2xl border border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))] p-6 text-center text-sm text-[rgb(var(--text-secondary))]"
+        className="flex items-center gap-2 rounded-2xl border border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))] p-6 text-sm text-[rgb(var(--text-secondary))]"
         role="status"
         aria-live="polite"
       >
+        <Icon name="shield" className="h-4 w-4 text-sky-500 dark:text-sky-300" />
         <p>Este vendor no tiene antenas registradas.</p>
       </div>
     );

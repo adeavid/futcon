@@ -6,6 +6,16 @@
   color-scheme: light dark;
 }
 
+html {
+  font-size: 15px;
+}
+
+@media (min-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+}
+
 .theme-light {
   --bg-surface: 255 255 255;
   --bg-subtle: 248 250 252;

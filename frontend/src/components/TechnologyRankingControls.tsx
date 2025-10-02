@@ -1,4 +1,5 @@
 import React from 'react';
+import { Icon } from './icons';
 
 interface TechnologyRankingControlsProps {
   technologies: string[];
@@ -20,8 +21,8 @@ export const TechnologyRankingControls: React.FC<TechnologyRankingControlsProps>
 
   return (
     <div className="mb-6 flex flex-col gap-2 rounded-2xl border border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))] p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-      <label htmlFor={selectId} className="text-sm font-medium text-[rgb(var(--text-primary))]">
-        Selecciona tecnología
+      <label htmlFor={selectId} className="flex items-center gap-2 text-sm font-medium text-[rgb(var(--text-primary))]">
+        <Icon name="antenna" className="h-4 w-4 text-sky-600 dark:text-sky-300" /> Selecciona tecnología
       </label>
       <select
         id={selectId}

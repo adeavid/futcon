@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Antenna } from '../api/vendors';
 import { computeVendorTechnologyAverages } from '../lib/vendor';
+import { Icon } from './icons';
 
 interface VendorInsightCardProps {
   antennas: Antenna[];
@@ -16,8 +17,11 @@ export const VendorInsightCard: React.FC<VendorInsightCardProps> = ({ antennas }
   const maxSpeed = Math.max(...points.map((point) => point.averageSpeed)) || 1;
 
   return (
-    <section className="rounded-2xl border border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))] p-6 shadow-sm transition-colors">
-      <header className="flex items-center justify-between">
+    <section className="rounded-2xl border border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))] p-5 shadow-sm transition hover:shadow-lg sm:p-6">
+      <header className="flex items-center gap-3">
+        <div className="rounded-full bg-sky-500/10 p-2">
+          <Icon name="trendUp" className="h-5 w-5 text-sky-600 dark:text-sky-300" />
+        </div>
         <div>
           <h2 className="text-sm font-semibold uppercase tracking-wide text-[rgb(var(--text-secondary))]">
             Rendimiento por tecnología
@@ -33,7 +37,10 @@ export const VendorInsightCard: React.FC<VendorInsightCardProps> = ({ antennas }
           return (
             <div key={point.technology} className="space-y-1">
               <div className="flex items-center justify-between text-xs text-[rgb(var(--text-secondary))]">
-                <span className="font-medium">{point.technology}</span>
+                <span className="flex items-center gap-2 font-medium">
+                  <Icon name="antenna" className="h-3 w-3" />
+                  {point.technology}
+                </span>
                 <span>{point.averageSpeed.toFixed(1)} Mbps</span>
               </div>
               <div className="h-2 rounded-full bg-sky-500/10">
