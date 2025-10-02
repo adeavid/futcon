@@ -91,7 +91,7 @@ describe('VendorDetailRoute', () => {
 
     expect(screen.getByRole('img', { name: /logo de vendor a/i })).toBeInTheDocument();
     expect(screen.getByText(/Fundado el/)).toBeInTheDocument();
-    expect(screen.getByText(/Velocidad media/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Velocidad media/)).not.toHaveLength(0);
     expect(screen.getByText('Antenas disponibles')).toBeInTheDocument();
   });
 

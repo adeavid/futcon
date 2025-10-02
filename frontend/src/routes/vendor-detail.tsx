@@ -5,6 +5,7 @@ import { useVendorsQuery, selectVendorById } from '../api/vendors';
 import { VendorCard } from '../components/VendorCard';
 import { AntennaList } from '../components/AntennaList';
 import { summarizeVendorSpeeds } from '../lib/vendor';
+import { VendorInsightCard } from '../components/VendorInsightCard';
 
 export const Route = createRoute({
   getParentRoute: () => RootRoute,
@@ -84,6 +85,7 @@ function VendorDetailPage() {
         ← Volver al ranking global
       </Link>
       <VendorCard vendor={vendor} summary={summary} />
+      <VendorInsightCard antennas={vendor.antennas} />
       <AntennaList antennas={vendor.antennas} />
     </div>
   );

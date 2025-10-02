@@ -1,6 +1,9 @@
 import { Link, Outlet, createRootRouteWithContext } from '@tanstack/react-router';
 import type { QueryClient } from '@tanstack/react-query';
 import React from 'react';
+import type { Vendor } from '../api/vendors';
+import { summarizeVendorSpeeds } from '../lib/vendor';
+import { useVendorsQuery } from '../api/vendors';
 
 export interface RouterContext {
   queryClient: QueryClient;
@@ -79,6 +82,82 @@ const ThemeStatus: React.FC = () => {
   return <span>Construido con React, TanStack y FastAPI. Modo {theme === 'dark' ? 'oscuro' : 'claro'} activo.</span>;
 };
 
+const GlobalHero: React.FC = () => {
+  const { data, isLoading, isError } = useVendorsQuery();
+  const vendors = data ?? [];
+
+  const metrics = React.useMemo(() => {
+    if (vendors.length === 0) {
+      return null;
+    }
+
+    const totals = vendors.map((vendor) => ({
+      id: vendor.id,
+      name: vendor.vendor,
+      average: summarizeVendorSpeeds(vendor.antennas).average,
+    }));
+
+    const sorted = [...totals].sort((a, b) => b.average - a.average);
+    const topVendor = sorted[0];
+    const globalAverage = sorted.reduce((acc, item) => acc + item.average, 0) / sorted.length;
+    const variability = sorted.length > 1 ? sorted[0].average - sorted[sorted.length - 1].average : 0;
+
+    return {
+      topVendor,
+      globalAverage,
+      variability,
+    };
+  }, [vendors]);
+
+  if (isLoading) {
+    return (
+      <div className="grid gap-4 rounded-2xl border border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))] p-5 shadow-sm">
+        <p className="text-sm text-[rgb(var(--text-secondary))]">Calculando métricas globales…</p>
+      </div>
+    );
+  }
+
+  if (isError || !metrics) {
+    return (
+      <div className="grid gap-2 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-700">
+        <p>No se pudieron calcular las métricas globales en este momento.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid gap-4 rounded-2xl border border-[rgb(var(--border-muted))] bg-gradient-to-r from-sky-500/5 via-transparent to-indigo-500/10 p-6 text-sm shadow-md transition hover:shadow-lg sm:grid-cols-3">
+      <div className="space-y-2">
+        <p className="uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">Top vendor</p>
+        <p className="text-2xl font-semibold text-[rgb(var(--text-primary))]">
+          {metrics.topVendor?.name ?? '—'}
+        </p>
+        <p className="text-xs text-[rgb(var(--text-secondary))]">
+          Media {metrics.topVendor?.average.toFixed(1)} Mbps
+        </p>
+      </div>
+      <div className="space-y-2">
+        <p className="uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">Velocidad global</p>
+        <p className="text-2xl font-semibold text-[rgb(var(--text-primary))]">
+          {metrics.globalAverage.toFixed(1)} Mbps
+        </p>
+        <p className="text-xs text-[rgb(var(--text-secondary))]">
+          Promedio combinado en todas las tecnologías
+        </p>
+      </div>
+      <div className="space-y-2">
+        <p className="uppercase text-xs font-semibold tracking-wide text-sky-600 dark:text-sky-300">Brecha de rendimiento</p>
+        <p className="text-2xl font-semibold text-[rgb(var(--text-primary))]">
+          {metrics.variability.toFixed(1)} Mbps
+        </p>
+        <p className="text-xs text-[rgb(var(--text-secondary))]">
+          Diferencia entre vendor líder y rezagado
+        </p>
+      </div>
+    </div>
+  );
+};
+
 const RouteComponent: React.FC = () => {
   return (
     <ThemeProvider>
@@ -86,8 +165,8 @@ const RouteComponent: React.FC = () => {
         Saltar al contenido principal
       </a>
       <div className="min-h-screen bg-[rgb(var(--bg-subtle))] text-[rgb(var(--text-primary))] transition-colors">
-        <header className="border-b border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))]/80 backdrop-blur">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <header className="border-b border-[rgb(var(--border-muted))] bg-gradient-to-r from-sky-500/10 via-transparent to-indigo-500/10 backdrop-blur">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-5">
             <div className="flex items-center gap-4">
               <div className="rounded-full bg-sky-500/10 p-2">
                 <span className="text-lg font-semibold text-sky-600 dark:text-sky-400">FC</span>
@@ -131,6 +210,9 @@ const RouteComponent: React.FC = () => {
           </div>
         </header>
         <main id="contenido" className="mx-auto grid max-w-6xl gap-6 px-4 py-8 lg:grid-cols-[2fr_1fr]">
+          <section className="col-span-full">
+            <GlobalHero />
+          </section>
           <section className="space-y-6">
             <Outlet />
           </section>

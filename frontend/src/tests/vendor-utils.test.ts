@@ -7,6 +7,7 @@ import {
   listTechnologies,
   normalizeTechnology,
   parseSpeed,
+  computeVendorTechnologyAverages,
   summarizeVendorSpeeds,
 } from '../lib/vendor';
 
@@ -101,5 +102,12 @@ describe('vendor utils', () => {
 
   it('summarizeVendorSpeeds devuelve ceros cuando no hay antenas', () => {
     expect(summarizeVendorSpeeds([])).toEqual({ average: 0, min: 0, max: 0 });
+  });
+
+  it('computeVendorTechnologyAverages agrupa por tecnología y ordena alfabéticamente', () => {
+    const points = computeVendorTechnologyAverages(vendors[0].antennas);
+    expect(points).toHaveLength(2);
+    expect(points[0].technology).toBe('2G');
+    expect(points[0].averageSpeed).toBeCloseTo(100);
   });
 });

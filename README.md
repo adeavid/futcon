@@ -81,6 +81,7 @@ No se requieren variables para el entorno local. Para despliegues puedes paramet
 - **Ranking por tecnología** (`/ranking-tecnologia`): selector accesible de tecnologías disponibles (2G, 3G, 4G, LTE, 5G, etc.). La tabla se recalcula con `useMemo` usando `computeTechnologyRanking`; vendors sin antenas para la tecnología seleccionada se omiten. Si un filtro no tiene datos se muestra mensaje contextual.
 - **Detalle de vendor** (`/vendor/:vendorId`): tarjeta con logo, fecha de fundación formateada (`formatFoundationDate`), resumen de velocidades (media/mín/max) generado por `summarizeVendorSpeeds` y tabla de antenas ordenadas por tecnología/velocidad. Incluye estado “vendor no encontrado” y enlaces de retorno accesibles.
 - **Temas y usabilidad**: toggle accesible para tema claro/oscuro (recuerda preferencia del usuario), enlaces entre vistas, cartas contextuales y skip link para ir al contenido principal.
+- **Hero global y tarjetas de insight**: la cabecera presenta KPIs clave (vendor líder, media global, brecha de rendimiento) y la vista de detalle incluye una tarjeta con micro‐barras que comparan la velocidad media por tecnología.
 
 ## Estructura del proyecto
 
@@ -118,6 +119,7 @@ No se requieren variables para el entorno local. Para despliegues puedes paramet
 - Enlace “Saltar al contenido” visible al enfocar para facilitar navegación con teclado.
 - Estados de foco personalizados (`focus-ring`) y `aria-current` en navegación para anunciar la sección activa.
 - Sidebar de sugerencias (desktop) y tarjetas con contraste dinámico basadas en CSS variables (`theme-light`/`theme-dark`).
+- KPIs globales y visualizaciones ligeras (micro-barras) para entender rendimiento por tecnología sin depender de librerías gráficas adicionales.
 
 ## Deploy en Render
 

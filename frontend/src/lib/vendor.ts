@@ -14,6 +14,11 @@ export interface VendorSpeedSummary {
   max: number;
 }
 
+export interface TechnologySpeedPoint {
+  technology: string;
+  averageSpeed: number;
+}
+
 export const parseSpeed = (speed: string): number => {
   const trimmed = speed.trim();
   const match = SPEED_REGEX.exec(trimmed);
@@ -110,4 +115,22 @@ export const summarizeVendorSpeeds = (antennas: Antenna[]): VendorSpeedSummary =
     min: Math.min(...speeds),
     max: Math.max(...speeds),
   };
+};
+
+export const computeVendorTechnologyAverages = (antennas: Antenna[]): TechnologySpeedPoint[] => {
+  const grouped = antennas.reduce<Record<string, number[]>>((accumulator, antenna) => {
+    const key = normalizeTechnology(antenna.technology);
+    if (!accumulator[key]) {
+      accumulator[key] = [];
+    }
+    accumulator[key].push(parseSpeed(antenna.speedMbps));
+    return accumulator;
+  }, {});
+
+  return Object.entries(grouped)
+    .map<TechnologySpeedPoint>(([technology, speeds]) => ({
+      technology,
+      averageSpeed: speeds.reduce((total, speed) => total + speed, 0) / speeds.length,
+    }))
+    .sort((a, b) => a.technology.localeCompare(b.technology));
 };

@@ -374,6 +374,29 @@ Genera el código del Paso 4 (UI polish & theming) con estas metas:
 **Resumen del resultado:** Se añadió `ThemeProvider` con persistencia de preferencia, toggle accesible en la cabecera y footer con estado del tema; se introdujeron skip link y focus styles reutilizables, se modernizaron los layouts (grid con sidebar, tarjetas y tablas con borde/variables de color) y se actualizaron los tests para funcionar con el router real.  
 **Uso dentro del proyecto:** Ajustes en `frontend/src/index.css`, `frontend/src/routes/__root.tsx`, `frontend/src/main.tsx`, `frontend/src/components/VendorTable.tsx`, `frontend/src/components/VendorCard.tsx`, `frontend/src/components/AntennaList.tsx`, `frontend/src/components/TechnologyRankingControls.tsx`, rutas `frontend/src/routes/global-ranking.tsx`, `frontend/src/routes/technology-ranking.tsx`, `frontend/src/routes/vendor-detail.tsx` y tests `frontend/src/tests/*`. Documentación actualizada en `README.md`.
 
+## Interacción 5
+**Fecha y hora (Europe/Madrid):** 2025-10-02 04:17  
+**Herramienta / Modelo:** ChatGPT – GPT-5 (Codex TL)  
+**Objetivo:** Añadir hero de KPIs globales y tarjeta de insights por tecnología, aplicando animaciones/shadows premium y actualizar documentación  
+**Prompt exacto enviado:**
+```
+Incorporar una “Vendor Insight Card” con visualización ligera en el detalle
+▌   (por ejemplo, una micro‐barra horizontal o sparkline que compare velocidades
+▌   por tecnología). Puedes generar los dataset con computeTechnologyRanking
+▌   por vendor y usar un gráfico minimalista basado en Tailwind (divs con width
+▌   en %); evita librerías pesadas. Así iluminas patrones visuales sin romper
+▌   simplicidad. Añade modos de tarjeta en la página principal (hero con KPIs globales: top
+▌   vendor, velocidad media total, variación).
+▌   2. Introduce animaciones suaves (transition, hover:) y sombras sutiles
+▌   (shadow-md/hover:shadow-lg) para dar sensación premium.
+▌   3. Ajusta tipografía (tracking, tamaño base 15/16 px) y espaciados uniformes
+▌   (gap-6, p-6) para mantener armonía.
+▌   4. Usa degradados discretos en header/CTA (ej. bg-gradient-to-r from-sky-
+▌   500/10 to-blue-500/10). Luego actualiza Prompts.md y el readme en caso de ser necesario
+```
+**Resumen del resultado:** Se incorporó un hero con KPIs (vendor líder, media global, brecha) y una tarjeta “Vendor Insight” con micro-barras por tecnología; se ajustaron degradados, sombras y animaciones suaves. Tests y README actualizados.  
+**Uso dentro del proyecto:** Cambios en `frontend/src/lib/vendor.ts`, nuevo componente `frontend/src/components/VendorInsightCard.tsx`, actualizaciones en `frontend/src/routes/__root.tsx`, `frontend/src/routes/vendor-detail.tsx`, y pruebas `frontend/src/tests/vendor-utils.test.ts`, `frontend/src/tests/vendor-detail.test.tsx`.
+
 ## 📝 Ejemplo de entrada en PROMPTS.md
 ## Interacción 1
 Herramienta/Modelo: ChatGPT – GPT-4o
