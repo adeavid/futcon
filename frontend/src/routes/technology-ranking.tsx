@@ -95,7 +95,7 @@ export const TechnologyRankingPage: React.FC = () => {
             <Link
               to="/vendor/$vendorId"
               params={{ vendorId }}
-              className="text-blue-600 underline-offset-2 hover:underline focus:outline-none focus-visible:ring focus-visible:ring-blue-300"
+              className="focus-ring rounded-full px-2 py-1 text-sky-600 underline-offset-2 transition hover:bg-sky-500/10 dark:text-sky-300"
               aria-label={`Ver detalle de ${vendorName}`}
             >
               {vendorName}

@@ -80,6 +80,7 @@ No se requieren variables para el entorno local. Para despliegues puedes paramet
 - **Clasificación global** (`/`): tabla ordenada por velocidad media total de cada vendor. El caption describe la tabla, se incluyen estados de carga y error con botón de reintento.
 - **Ranking por tecnología** (`/ranking-tecnologia`): selector accesible de tecnologías disponibles (2G, 3G, 4G, LTE, 5G, etc.). La tabla se recalcula con `useMemo` usando `computeTechnologyRanking`; vendors sin antenas para la tecnología seleccionada se omiten. Si un filtro no tiene datos se muestra mensaje contextual.
 - **Detalle de vendor** (`/vendor/:vendorId`): tarjeta con logo, fecha de fundación formateada (`formatFoundationDate`), resumen de velocidades (media/mín/max) generado por `summarizeVendorSpeeds` y tabla de antenas ordenadas por tecnología/velocidad. Incluye estado “vendor no encontrado” y enlaces de retorno accesibles.
+- **Temas y usabilidad**: toggle accesible para tema claro/oscuro (recuerda preferencia del usuario), enlaces entre vistas, cartas contextuales y skip link para ir al contenido principal.
 
 ## Estructura del proyecto
 
@@ -110,6 +111,13 @@ No se requieren variables para el entorno local. Para despliegues puedes paramet
 - **`VendorTable` reutilizable**: acepta vendors crudos o filas precomputadas, manteniendo accesibilidad (`caption`, `aria-live`) y permitiendo renderización de nombres custom (links al detalle).
 - **Tailwind utilitario**: evita dependencias UI pesadas, mantiene estilos consistentes sin inline styling.
 - **Rutas cohesionadas**: TanStack Router provee navegación entre listados y detalle con estados de carga/error consistentes.
+
+## Diseño y accesibilidad
+
+- Toggle de tema claro/oscuro sincronizado con la preferencia del sistema y persistido en `localStorage`.
+- Enlace “Saltar al contenido” visible al enfocar para facilitar navegación con teclado.
+- Estados de foco personalizados (`focus-ring`) y `aria-current` en navegación para anunciar la sección activa.
+- Sidebar de sugerencias (desktop) y tarjetas con contraste dinámico basadas en CSS variables (`theme-light`/`theme-dark`).
 
 ## Deploy en Render
 

@@ -79,7 +79,7 @@ function VendorDetailPage() {
     <div className="space-y-6">
       <Link
         to="/"
-        className="inline-flex w-fit items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:border-slate-300 hover:text-slate-900 focus:outline-none focus-visible:ring focus-visible:ring-slate-300"
+        className="focus-ring inline-flex w-fit items-center gap-2 rounded-full border border-[rgb(var(--border-muted))] bg-[rgb(var(--bg-surface))] px-3 py-2 text-sm font-medium text-[rgb(var(--text-secondary))] transition hover:border-sky-300 hover:text-sky-600"
       >
         ← Volver al ranking global
       </Link>
