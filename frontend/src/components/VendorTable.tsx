@@ -1,26 +1,40 @@
 import React from 'react';
 import type { Vendor } from '../api/vendors';
-import { computeAverage, formatSpeed } from '../lib/vendor';
+import { computeAverage, formatSpeed, type TechnologyRankingRow } from '../lib/vendor';
 
 interface VendorTableProps {
-  vendors: Vendor[];
+  vendors?: Vendor[];
+  rows?: TechnologyRankingRow[];
+  caption?: string;
 }
 
-export const VendorTable: React.FC<VendorTableProps> = ({ vendors }) => {
+export const VendorTable: React.FC<VendorTableProps> = ({ vendors = [], rows, caption }) => {
+  type RankingEntry =
+    | { vendor: Vendor; averageSpeed: number }
+    | { vendorId: string; vendorName: string; averageSpeed: number };
+
   const ranking = React.useMemo(() => {
+    if (rows) {
+      return rows.map<RankingEntry>((row) => ({
+        vendorId: row.vendorId,
+        vendorName: row.vendorName,
+        averageSpeed: row.averageSpeed,
+      }));
+    }
+
     return vendors
-      .map((vendor) => ({
+      .map<RankingEntry>((vendor) => ({
         vendor,
         averageSpeed: computeAverage(vendor.antennas),
       }))
       .sort((a, b) => b.averageSpeed - a.averageSpeed);
-  }, [vendors]);
+  }, [rows, vendors]);
 
   return (
     <section aria-live="polite" className="overflow-x-auto">
       <table className="min-w-full table-auto overflow-hidden rounded-lg border border-slate-200 bg-white text-left">
         <caption className="px-4 py-3 text-left text-sm text-slate-600">
-          Clasificación global por velocidad media
+          {caption ?? 'Clasificación global por velocidad media'}
         </caption>
         <thead className="bg-slate-100 text-sm uppercase text-slate-700">
           <tr>
@@ -30,13 +44,19 @@ export const VendorTable: React.FC<VendorTableProps> = ({ vendors }) => {
           </tr>
         </thead>
         <tbody className="text-sm text-slate-800">
-          {ranking.map(({ vendor, averageSpeed }, index) => (
-            <tr key={vendor.id} className={index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-              <td className="px-4 py-3 font-semibold">{index + 1}</td>
-              <td className="px-4 py-3">{vendor.vendor}</td>
-              <td className="px-4 py-3">{formatSpeed(averageSpeed)}</td>
-            </tr>
-          ))}
+          {ranking.map((entry, index) => {
+            const vendorId = 'vendor' in entry ? entry.vendor.id : entry.vendorId;
+            const vendorName = 'vendor' in entry ? entry.vendor.vendor : entry.vendorName;
+            const averageSpeed = entry.averageSpeed;
+
+            return (
+              <tr key={vendorId} className={index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                <td className="px-4 py-3 font-semibold">{index + 1}</td>
+                <td className="px-4 py-3">{vendorName}</td>
+                <td className="px-4 py-3">{formatSpeed(averageSpeed)}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </section>

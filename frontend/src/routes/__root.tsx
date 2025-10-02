@@ -26,7 +26,8 @@ const RouteComponent: React.FC = () => {
               <li>
                 <Link
                   to="/ranking-tecnologia"
-                  className="cursor-not-allowed text-slate-400"
+                  className="text-slate-700 transition-colors hover:text-slate-900"
+                  activeProps={{ className: 'text-blue-600' }}
                 >
                   Ranking por tecnología
                 </Link>

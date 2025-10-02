@@ -5,11 +5,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Route as RootRoute } from './routes/__root';
 import { Route as GlobalRankingRoute } from './routes/global-ranking';
+import { Route as TechnologyRankingRoute } from './routes/technology-ranking';
 import './index.css';
 
 const queryClient = new QueryClient();
 
-const routeTree = RootRoute.addChildren([GlobalRankingRoute]);
+const routeTree = RootRoute.addChildren([GlobalRankingRoute, TechnologyRankingRoute]);
 
 const router = createRouter({
   routeTree,
