@@ -55,7 +55,9 @@ describe('GlobalRankingPage', () => {
       // intentionally never resolve to assert loading state
     });
 
-    vi.spyOn(global, 'fetch').mockImplementation(() => pendingPromise as unknown as Promise<Response>);
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      () => pendingPromise as unknown as Promise<Response>,
+    );
 
     const Wrapper = createWrapper();
 
@@ -67,7 +69,7 @@ describe('GlobalRankingPage', () => {
   });
 
   it('muestra el estado de error y permite reintentar', async () => {
-    vi.spyOn(global, 'fetch').mockRejectedValue(new Error('Fallo de red'));
+    vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Fallo de red'));
 
     const Wrapper = createWrapper();
 
@@ -102,7 +104,7 @@ describe('GlobalRankingPage', () => {
       },
     ];
 
-    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
       new Response(JSON.stringify(mockData), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },

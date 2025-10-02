@@ -77,7 +77,9 @@ describe('TechnologyRankingPage', () => {
 
   it('muestra el estado de carga', () => {
     const pendingPromise = new Promise<Response>(() => {});
-    vi.spyOn(global, 'fetch').mockImplementation(() => pendingPromise as unknown as Promise<Response>);
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      () => pendingPromise as unknown as Promise<Response>,
+    );
 
     const Wrapper = createWrapper();
 
@@ -89,7 +91,7 @@ describe('TechnologyRankingPage', () => {
   });
 
   it('renderiza ranking por tecnología y permite cambiar de opción', async () => {
-    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
       new Response(JSON.stringify(mockVendors), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -119,7 +121,7 @@ describe('TechnologyRankingPage', () => {
   });
 
   it('muestra estado de error y reintenta', async () => {
-    vi.spyOn(global, 'fetch').mockRejectedValue(new Error('Fallo backend'));
+    vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Fallo backend'));
 
     const Wrapper = createWrapper();
 
@@ -131,7 +133,7 @@ describe('TechnologyRankingPage', () => {
   });
 
   it('muestra mensaje cuando no hay datos para la tecnología seleccionada', async () => {
-    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
       new Response(JSON.stringify(mockVendors), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },

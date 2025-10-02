@@ -60,7 +60,9 @@ describe('VendorDetailRoute', () => {
 
   it('muestra estado de carga', async () => {
     const pendingPromise = new Promise<Response>(() => {});
-    vi.spyOn(global, 'fetch').mockImplementation(() => pendingPromise as unknown as Promise<Response>);
+    vi.spyOn(globalThis, 'fetch').mockImplementation(
+      () => pendingPromise as unknown as Promise<Response>,
+    );
 
     await renderVendorDetail('1');
 
@@ -68,7 +70,7 @@ describe('VendorDetailRoute', () => {
   });
 
   it('muestra estado de error y permite reintentar', async () => {
-    vi.spyOn(global, 'fetch').mockRejectedValue(new Error('Fallo backend'));
+    vi.spyOn(globalThis, 'fetch').mockRejectedValue(new Error('Fallo backend'));
 
     await renderVendorDetail('1');
 
@@ -78,7 +80,7 @@ describe('VendorDetailRoute', () => {
   });
 
   it('renderiza detalle cuando el vendor existe', async () => {
-    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
       new Response(JSON.stringify([vendor]), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -96,7 +98,7 @@ describe('VendorDetailRoute', () => {
   });
 
   it('muestra mensaje de vendor no encontrado', async () => {
-    vi.spyOn(global, 'fetch').mockResolvedValueOnce(
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
       new Response(JSON.stringify([vendor]), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
