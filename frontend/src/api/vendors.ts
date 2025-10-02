@@ -13,8 +13,11 @@ export interface Vendor {
   antennas: Antenna[];
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') ?? '';
+const vendorsEndpoint = API_BASE_URL ? `${API_BASE_URL}/api/vendors` : '/api/vendors';
+
 export const fetchVendors = async (): Promise<Vendor[]> => {
-  const response = await fetch('/api/vendors');
+  const response = await fetch(vendorsEndpoint);
 
   if (!response.ok) {
     throw new Error('No se pudieron obtener los vendors');
