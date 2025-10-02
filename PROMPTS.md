@@ -130,6 +130,91 @@ Genera el código del Paso 1 siguiendo estas instrucciones estrictas. Formato
 **Resumen del resultado:** Se generó el scaffolding completo para backend FastAPI y frontend React/TanStack con tabla de ranking accesible, utilidades de parsing/ordenación y prueba de integración inicial. Se añadieron correcciones posteriores (favicon embebido, init packages, ajustes de test y retry) partiendo del mismo prompt.  
 **Uso dentro del proyecto:** Código creado/actualizado en `backend/app/main.py`, `backend/app/data/vendors.json`, `frontend/src/main.tsx`, `frontend/src/components/VendorTable.tsx`, `frontend/src/api/vendors.ts`, `frontend/src/tests/global-ranking.test.tsx`, y configuración asociada (`vite.config.ts`, Tailwind, Vitest, etc.).
 **Notas adicionales:** Iteración completada con tests (`pnpm test --run`) y revisión de estados loading/error; ajustes manuales documentados para compatibilidad TanStack Router Devtools y retry de queries.
+
+## Interacción 2
+**Fecha y hora (Europe/Madrid):** 2025-10-01 16:26  
+**Herramienta / Modelo:** ChatGPT – GPT-5 (Codex TL)  
+**Objetivo:** Incorporar ranking por tecnología, refactor de tabla reutilizable y cobertura de pruebas asociadas  
+**Prompt exacto enviado:**
+```
+Genera el código del Paso 2 (Ranking por tecnología) siguiendo las
+  instrucciones. Formato de salida: bloques ### <ruta> + código completo. Solo
+  archivos mencionados. No resumas.
+
+  Contexto existente:
+
+  - Monorepo con backend FastAPI ya operativo.
+  - Frontend React+TS con TanStack Router/Query, Tailwind, Vitest.
+  - Tabla de ranking global en VendorTable.
+  - Query useVendorsQuery disponible.
+  - Tests con Vitest + Testing Library; userEvent instalado.
+
+  Tareas:
+
+  1. frontend/src/lib/vendor.ts
+      - Añadir listTechnologies(vendors: Vendor[]): string[] para obtener
+  tecnologias únicas ordenadas.
+      - Añadir computeTechnologyRanking(vendors: Vendor[], technology: string)
+  que devuelve { vendorId, vendorName, averageSpeed }[] ordenado desc.
+      - Asegurar que ignora vendors sin antenas de esa tecnología; lanza error
+  legible si technology vacío.
+      - Exportar nuevos tipos y asegurar tests puedan importar.
+  2. frontend/src/components/TechnologyRankingControls.tsx
+      - Crear componente con props { technologies: string[]; selected: string;
+  onChange: (technology: string) => void; }.
+      - Renderizar label + select accesibles (id, aria-label), opciones
+  ordenadas; manejar disabled si lista vacía.
+      - Tailwind minimalista (flex, gap, etc.).
+  3. frontend/src/components/VendorTable.tsx
+      - Permitir caption configurable vía prop opcional caption.
+      - Soportar datasets con campos { vendorName, averageSpeed }[] cuando se
+  pase rows precomputados (sin romper compatibilidad actual).
+      - Mantener aria-live. Reutilizar formato de velocidad.
+  4. frontend/src/routes/technology-ranking.tsx
+      - Crear route TanStack (path: '/ranking-tecnologia').
+      - Usar useVendorsQuery. Mientras carga/error reutilizar patrones del
+  global ranking.
+      - Cuando hay datos:
+          - Obtener tecnologías via helper, elegir default (primera) usando
+  useState.
+          - Calcular ranking memoizado para tecnología seleccionada; si lista
+  vacía, mostrar mensaje “No hay datos para esta tecnología”.
+          - Renderizar TechnologyRankingControls y VendorTable con caption
+  Ranking por tecnología (${technology}).
+      - Botón retry disponible en error state.
+  5. frontend/src/routes/__root.tsx
+      - Actualizar nav: enlace a /ranking-tecnologia activo cuando corresponda
+  (sin cursor-not-allowed), aria-current.
+  6. frontend/src/main.tsx
+      - Importar y registrar Route as TechnologyRankingRoute en routeTree.
+  7. Tests:
+      - frontend/src/tests/technology-ranking.test.tsx:
+          - Simular fetch con vendors sample que cubran tecnologías; usar render
+  con QueryClient.
+          - Verificar loading → tabla.
+          - Usar userEvent.selectOptions para cambiar tecnología y confirmar
+  orden correctos.
+          - Test error state (fetch rechaza) con retry.
+          - Test mensaje cuando tecnología sin datos (forzar dataset con
+  tecnología atípica).
+      - frontend/src/tests/vendor-utils.test.ts:
+          - Tests unitarios para listTechnologies, computeTechnologyRanking,
+  parseSpeed edge (reutilizar mocks).
+          - Cobertura para vendors sin antena, tecnología inexistente.
+  8. Ajustar imports donde corresponda (index.ts no hay) y mantener lint.
+  9. Asegurar pnpm test --run pasa.
+
+  Estilo:
+
+  - Tailwind utilitario, sin inline.
+  - Comentarios sólo si clarifican lógica no obvia.
+  - Tipado estricto; sin any.
+  - Manejar lowercase/uppercase tecnología consistentemente (normalizar a
+  uppercase al comparar).
+```
+**Resumen del resultado:** Se añadió la vista de ranking por tecnología con selector accesible, se refactorizó `VendorTable` para soportar filas agregadas, se extendieron los helpers (`listTechnologies`, `computeTechnologyRanking`) y se cubrieron con pruebas unitarias e integración.  
+**Uso dentro del proyecto:** Cambios en `frontend/src/lib/vendor.ts`, `frontend/src/components/VendorTable.tsx`, nueva UI `frontend/src/components/TechnologyRankingControls.tsx`, la ruta `frontend/src/routes/technology-ranking.tsx`, integración en `frontend/src/main.tsx` y `frontend/src/routes/__root.tsx`, más tests en `frontend/src/tests/vendor-utils.test.ts` y `frontend/src/tests/technology-ranking.test.tsx`.
+
 ## 📝 Ejemplo de entrada en PROMPTS.md
 ## Interacción 1
 Herramienta/Modelo: ChatGPT – GPT-4o
