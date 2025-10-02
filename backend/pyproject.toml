@@ -16,4 +16,4 @@ dependencies = [
 ]
 
 [project.scripts]
-dev = "uvicorn backend.app.main:app --reload"
+dev = "backend.app.main:run_dev"

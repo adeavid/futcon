@@ -60,3 +60,10 @@ def health() -> dict[str, str]:
 @app.get("/api/vendors", response_model=List[Vendor], tags=["vendors"])
 def get_vendors() -> List[Vendor]:
     return load_vendors()
+
+
+def run_dev() -> None:
+    """Convenience entrypoint for local development."""
+    import uvicorn
+
+    uvicorn.run("backend.app.main:app", host="0.0.0.0", port=8000, reload=True)
