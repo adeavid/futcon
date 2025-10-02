@@ -6,11 +6,12 @@ import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { Route as RootRoute } from './routes/__root';
 import { Route as GlobalRankingRoute } from './routes/global-ranking';
 import { Route as TechnologyRankingRoute } from './routes/technology-ranking';
+import { Route as VendorDetailRoute } from './routes/vendor-detail';
 import './index.css';
 
 const queryClient = new QueryClient();
 
-const routeTree = RootRoute.addChildren([GlobalRankingRoute, TechnologyRankingRoute]);
+const routeTree = RootRoute.addChildren([GlobalRankingRoute, TechnologyRankingRoute, VendorDetailRoute]);
 
 const router = createRouter({
   routeTree,

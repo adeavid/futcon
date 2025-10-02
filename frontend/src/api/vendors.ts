@@ -38,3 +38,7 @@ export const useVendorsQuery = () => {
     retryDelay: 300,
   });
 };
+
+export const selectVendorById = (vendors: Vendor[], vendorId: string): Vendor | undefined => {
+  return vendors.find((vendor) => vendor.id === vendorId);
+};

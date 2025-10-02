@@ -3,8 +3,11 @@ import type { Vendor } from '../api/vendors';
 import {
   computeAverage,
   computeTechnologyRanking,
+  formatFoundationDate,
   listTechnologies,
+  normalizeTechnology,
   parseSpeed,
+  summarizeVendorSpeeds,
 } from '../lib/vendor';
 
 describe('vendor utils', () => {
@@ -74,5 +77,29 @@ describe('vendor utils', () => {
 
   it('computeTechnologyRanking falla con tecnología vacía', () => {
     expect(() => computeTechnologyRanking(vendors, '   ')).toThrow('La tecnología seleccionada es obligatoria.');
+  });
+
+  it('normalizeTechnology convierte a uppercase y recorta espacios', () => {
+    expect(normalizeTechnology(' lTe ')).toBe('LTE');
+  });
+
+  it('formatFoundationDate convierte epoch en fecha legible', () => {
+    // 1 enero 2000
+    expect(formatFoundationDate(946684800000)).toMatch(/2000/);
+  });
+
+  it('summarizeVendorSpeeds calcula media, min y max', () => {
+    const summary = summarizeVendorSpeeds([
+      { technology: '3G', speedMbps: '100 Mbps' },
+      { technology: '4G', speedMbps: '300 Mbps' },
+    ]);
+
+    expect(summary.average).toBeCloseTo(200);
+    expect(summary.min).toBe(100);
+    expect(summary.max).toBe(300);
+  });
+
+  it('summarizeVendorSpeeds devuelve ceros cuando no hay antenas', () => {
+    expect(summarizeVendorSpeeds([])).toEqual({ average: 0, min: 0, max: 0 });
   });
 });

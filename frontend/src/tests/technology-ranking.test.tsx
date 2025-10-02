@@ -1,4 +1,27 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
+
+vi.mock('@tanstack/react-router', async () => {
+  const actual = await vi.importActual<typeof import('@tanstack/react-router')>('@tanstack/react-router');
+  return {
+    ...actual,
+    Link: ({ to, params = {}, children, ...props }: any) => {
+      let href = typeof to === 'string' ? to : String(to);
+      if (typeof to === 'string') {
+        Object.entries(params as Record<string, string>).forEach(([key, value]) => {
+          href = href.replace(`$${key}`, value);
+        });
+      }
+      const { activeProps: _activeProps, ...rest } = props;
+      return (
+        <a href={href} {...rest}>
+          {children}
+        </a>
+      );
+    },
+  };
+});
+
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
@@ -7,46 +30,46 @@ import { TechnologyRankingPage } from '../routes/technology-ranking';
 import type { Vendor } from '../api/vendors';
 import * as vendorLib from '../lib/vendor';
 
-describe('TechnologyRankingPage', () => {
-  const createWrapper = () => {
-    const queryClient = new QueryClient({
-      defaultOptions: {
-        queries: {
-          retry: false,
-        },
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
       },
-    });
-
-    const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    );
-
-    return Wrapper;
-  };
-
-  const mockVendors: Vendor[] = [
-    {
-      id: '1',
-      vendor: 'Vendor A',
-      picture: '',
-      foundationDate: 0,
-      antennas: [
-        { technology: '2G', speedMbps: '100 Mbps' },
-        { technology: '5G', speedMbps: '500 Mbps' },
-      ],
     },
-    {
-      id: '2',
-      vendor: 'Vendor B',
-      picture: '',
-      foundationDate: 0,
-      antennas: [
-        { technology: '2G', speedMbps: '200 Mbps' },
-        { technology: '4G', speedMbps: '300 Mbps' },
-      ],
-    },
-  ];
+  });
 
+  const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+
+  return Wrapper;
+};
+
+const mockVendors: Vendor[] = [
+  {
+    id: '1',
+    vendor: 'Vendor A',
+    picture: '',
+    foundationDate: 0,
+    antennas: [
+      { technology: '2G', speedMbps: '100 Mbps' },
+      { technology: '5G', speedMbps: '500 Mbps' },
+    ],
+  },
+  {
+    id: '2',
+    vendor: 'Vendor B',
+    picture: '',
+    foundationDate: 0,
+    antennas: [
+      { technology: '2G', speedMbps: '200 Mbps' },
+      { technology: '4G', speedMbps: '300 Mbps' },
+    ],
+  },
+];
+
+describe('TechnologyRankingPage', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     cleanup();
@@ -90,6 +113,9 @@ describe('TechnologyRankingPage', () => {
     const rows = screen.getAllByRole('row');
     const [, firstRow] = rows;
     expect(firstRow).toHaveTextContent('Vendor A');
+
+    const vendorLink = screen.getByRole('link', { name: /ver detalle de vendor a/i });
+    expect(vendorLink).toHaveAttribute('href', '/vendor/1');
   });
 
   it('muestra estado de error y reintenta', async () => {

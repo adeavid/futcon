@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoute } from '@tanstack/react-router';
+import { Link, createRoute } from '@tanstack/react-router';
 import { Route as RootRoute } from './__root';
 import { useVendorsQuery } from '../api/vendors';
 import { VendorTable } from '../components/VendorTable';
@@ -44,7 +44,21 @@ export const GlobalRankingPage: React.FC = () => {
     );
   }
 
-  return <VendorTable vendors={data ?? []} />;
+  return (
+    <VendorTable
+      vendors={data ?? []}
+      renderVendorName={(vendorId, vendorName) => (
+        <Link
+          to="/vendor/$vendorId"
+          params={{ vendorId }}
+          className="text-blue-600 underline-offset-2 hover:underline focus:outline-none focus-visible:ring focus-visible:ring-blue-300"
+          aria-label={`Ver detalle de ${vendorName}`}
+        >
+          {vendorName}
+        </Link>
+      )}
+    />
+  );
 };
 
 export const Route = createRoute({

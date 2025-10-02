@@ -1,4 +1,27 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
+
+vi.mock('@tanstack/react-router', async () => {
+  const actual = await vi.importActual<typeof import('@tanstack/react-router')>('@tanstack/react-router');
+  return {
+    ...actual,
+    Link: ({ to, params = {}, children, ...props }: any) => {
+      let href = typeof to === 'string' ? to : String(to);
+      if (typeof to === 'string') {
+        Object.entries(params as Record<string, string>).forEach(([key, value]) => {
+          href = href.replace(`$${key}`, value);
+        });
+      }
+      const { activeProps: _activeProps, ...rest } = props;
+      return (
+        <a href={href} {...rest}>
+          {children}
+        </a>
+      );
+    },
+  };
+});
+
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
@@ -100,5 +123,8 @@ describe('GlobalRankingPage', () => {
     const [_, firstDataRow, secondDataRow] = rows;
     expect(firstDataRow).toHaveTextContent('Vendor A');
     expect(secondDataRow).toHaveTextContent('Vendor B');
+
+    const vendorLink = screen.getByRole('link', { name: /ver detalle de vendor a/i });
+    expect(vendorLink).toHaveAttribute('href', '/vendor/1');
   });
 });

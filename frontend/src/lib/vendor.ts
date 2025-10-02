@@ -8,6 +8,12 @@ export interface TechnologyRankingRow {
   averageSpeed: number;
 }
 
+export interface VendorSpeedSummary {
+  average: number;
+  min: number;
+  max: number;
+}
+
 export const parseSpeed = (speed: string): number => {
   const trimmed = speed.trim();
   const match = SPEED_REGEX.exec(trimmed);
@@ -41,7 +47,7 @@ export const listTechnologies = (vendors: Vendor[]): string[] => {
   vendors.forEach((vendor) => {
     vendor.antennas.forEach((antenna) => {
       if (antenna.technology) {
-        technologies.add(antenna.technology.toUpperCase());
+        technologies.add(normalizeTechnology(antenna.technology));
       }
     });
   });
@@ -50,7 +56,7 @@ export const listTechnologies = (vendors: Vendor[]): string[] => {
 };
 
 export const computeTechnologyRanking = (vendors: Vendor[], technology: string): TechnologyRankingRow[] => {
-  const normalizedTechnology = technology.trim().toUpperCase();
+  const normalizedTechnology = normalizeTechnology(technology);
 
   if (!normalizedTechnology) {
     throw new Error('La tecnología seleccionada es obligatoria.');
@@ -58,7 +64,9 @@ export const computeTechnologyRanking = (vendors: Vendor[], technology: string):
 
   const rows = vendors
     .map<TechnologyRankingRow | null>((vendor) => {
-      const antennas = vendor.antennas.filter((antenna) => antenna.technology.toUpperCase() === normalizedTechnology);
+      const antennas = vendor.antennas.filter(
+        (antenna) => normalizeTechnology(antenna.technology) === normalizedTechnology,
+      );
 
       if (antennas.length === 0) {
         return null;
@@ -74,4 +82,32 @@ export const computeTechnologyRanking = (vendors: Vendor[], technology: string):
     .sort((a, b) => b.averageSpeed - a.averageSpeed);
 
   return rows;
+};
+
+export const normalizeTechnology = (value: string): string => {
+  return value.trim().toUpperCase();
+};
+
+export const formatFoundationDate = (epochMs: number): string => {
+  const date = new Date(epochMs);
+  return new Intl.DateTimeFormat('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(date);
+};
+
+export const summarizeVendorSpeeds = (antennas: Antenna[]): VendorSpeedSummary => {
+  if (antennas.length === 0) {
+    return { average: 0, min: 0, max: 0 };
+  }
+
+  const speeds = antennas.map((antenna) => parseSpeed(antenna.speedMbps));
+  const total = speeds.reduce((sum, speed) => sum + speed, 0);
+
+  return {
+    average: total / speeds.length,
+    min: Math.min(...speeds),
+    max: Math.max(...speeds),
+  };
 };

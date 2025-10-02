@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoute } from '@tanstack/react-router';
+import { Link, createRoute } from '@tanstack/react-router';
 import { Route as RootRoute } from './__root';
 import { useVendorsQuery } from '../api/vendors';
 import { TechnologyRankingControls } from '../components/TechnologyRankingControls';
@@ -88,7 +88,20 @@ export const TechnologyRankingPage: React.FC = () => {
         onChange={setSelectedTechnology}
       />
       {hasData ? (
-        <VendorTable rows={rankingRows} caption={`Ranking por tecnología (${selectedTechnology})`} />
+        <VendorTable
+          rows={rankingRows}
+          caption={`Ranking por tecnología (${selectedTechnology})`}
+          renderVendorName={(vendorId, vendorName) => (
+            <Link
+              to="/vendor/$vendorId"
+              params={{ vendorId }}
+              className="text-blue-600 underline-offset-2 hover:underline focus:outline-none focus-visible:ring focus-visible:ring-blue-300"
+              aria-label={`Ver detalle de ${vendorName}`}
+            >
+              {vendorName}
+            </Link>
+          )}
+        />
       ) : (
         <div className="rounded-md border border-slate-200 bg-white p-6 text-center" role="status" aria-live="polite">
           <p className="text-sm text-slate-600">No hay datos para esta tecnología.</p>

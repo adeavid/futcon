@@ -77,8 +77,9 @@ No se requieren variables para el entorno local. Para despliegues puedes paramet
 
 ## Uso
 
-- **Clasificación global** (`/`): tabla ordenada por velocidad media total de cada vendor. El caption describe la tabla, se incluyen estados de carga y error.
+- **Clasificación global** (`/`): tabla ordenada por velocidad media total de cada vendor. El caption describe la tabla, se incluyen estados de carga y error con botón de reintento.
 - **Ranking por tecnología** (`/ranking-tecnologia`): selector accesible de tecnologías disponibles (2G, 3G, 4G, LTE, 5G, etc.). La tabla se recalcula con `useMemo` usando `computeTechnologyRanking`; vendors sin antenas para la tecnología seleccionada se omiten. Si un filtro no tiene datos se muestra mensaje contextual.
+- **Detalle de vendor** (`/vendor/:vendorId`): tarjeta con logo, fecha de fundación formateada (`formatFoundationDate`), resumen de velocidades (media/mín/max) generado por `summarizeVendorSpeeds` y tabla de antenas ordenadas por tecnología/velocidad. Incluye estado “vendor no encontrado” y enlaces de retorno accesibles.
 
 ## Estructura del proyecto
 
@@ -105,9 +106,10 @@ No se requieren variables para el entorno local. Para despliegues puedes paramet
 ## Decisiones arquitectónicas
 
 - **TanStack Router + Query**: se centraliza la obtención de vendors con `useVendorsQuery` para aprovechar caché y estados controlados.
-- **Helpers puros en `src/lib/vendor.ts`**: facilitan testabilidad y reutilización para ranking global/tecnología.
-- **`VendorTable` reutilizable**: acepta vendors crudos o filas precomputadas, manteniendo accesibilidad (`caption`, `aria-live`).
+- **Helpers puros en `src/lib/vendor.ts`**: facilitan testabilidad y reutilización (ranking global/tecnología, normalización de tecnologías, resumen de velocidades y formateo de fechas).
+- **`VendorTable` reutilizable**: acepta vendors crudos o filas precomputadas, manteniendo accesibilidad (`caption`, `aria-live`) y permitiendo renderización de nombres custom (links al detalle).
 - **Tailwind utilitario**: evita dependencias UI pesadas, mantiene estilos consistentes sin inline styling.
+- **Rutas cohesionadas**: TanStack Router provee navegación entre listados y detalle con estados de carga/error consistentes.
 
 ## Deploy en Render
 
@@ -128,9 +130,8 @@ No se requieren variables para el entorno local. Para despliegues puedes paramet
 
 ## Próximos pasos sugeridos
 
-1. Añadir vista de detalle de vendor (logo, fecha formateada, lista de antenas).
-2. Implementar ranking por tecnología con breakdown adicional (mediana, percentiles).
+1. Refinar UI/UX (temas claro/oscuro, improve responsive layout, focus visible, skip links).
+2. Añadir vista de detalle extendida (gráficos comparativos, breadcrumbs, CTA).
 3. Validar respuesta de la API con Zod y manejar estados vacíos en backend.
 4. Incluir MSW para pruebas de integración sin mock manual de `fetch`.
 5. Automatizar despliegue (CI) para ejecutar `pnpm test --run` y publicar en Render.
-

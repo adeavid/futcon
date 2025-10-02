@@ -6,9 +6,10 @@ interface VendorTableProps {
   vendors?: Vendor[];
   rows?: TechnologyRankingRow[];
   caption?: string;
+  renderVendorName?: (vendorId: string, vendorName: string) => React.ReactNode;
 }
 
-export const VendorTable: React.FC<VendorTableProps> = ({ vendors = [], rows, caption }) => {
+export const VendorTable: React.FC<VendorTableProps> = ({ vendors = [], rows, caption, renderVendorName }) => {
   type RankingEntry =
     | { vendor: Vendor; averageSpeed: number }
     | { vendorId: string; vendorName: string; averageSpeed: number };
@@ -48,11 +49,12 @@ export const VendorTable: React.FC<VendorTableProps> = ({ vendors = [], rows, ca
             const vendorId = 'vendor' in entry ? entry.vendor.id : entry.vendorId;
             const vendorName = 'vendor' in entry ? entry.vendor.vendor : entry.vendorName;
             const averageSpeed = entry.averageSpeed;
+            const content = renderVendorName ? renderVendorName(vendorId, vendorName) : vendorName;
 
             return (
               <tr key={vendorId} className={index % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
                 <td className="px-4 py-3 font-semibold">{index + 1}</td>
-                <td className="px-4 py-3">{vendorName}</td>
+                <td className="px-4 py-3">{content}</td>
                 <td className="px-4 py-3">{formatSpeed(averageSpeed)}</td>
               </tr>
             );

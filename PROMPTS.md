@@ -215,6 +215,134 @@ Genera el código del Paso 2 (Ranking por tecnología) siguiendo las
 **Resumen del resultado:** Se añadió la vista de ranking por tecnología con selector accesible, se refactorizó `VendorTable` para soportar filas agregadas, se extendieron los helpers (`listTechnologies`, `computeTechnologyRanking`) y se cubrieron con pruebas unitarias e integración.  
 **Uso dentro del proyecto:** Cambios en `frontend/src/lib/vendor.ts`, `frontend/src/components/VendorTable.tsx`, nueva UI `frontend/src/components/TechnologyRankingControls.tsx`, la ruta `frontend/src/routes/technology-ranking.tsx`, integración en `frontend/src/main.tsx` y `frontend/src/routes/__root.tsx`, más tests en `frontend/src/tests/vendor-utils.test.ts` y `frontend/src/tests/technology-ranking.test.tsx`.
 
+## Interacción 3
+**Fecha y hora (Europe/Madrid):** 2025-10-02 03:33  
+**Herramienta / Modelo:** ChatGPT – GPT-5 (Codex TL)  
+**Objetivo:** Implementar vista de detalle de vendor, navegación enlazada desde los rankings y extender utilidades de formateo/estadísticas con cobertura de tests  
+**Prompt exacto enviado:**
+```
+Genera el código del Paso 3 (Vendor Detail) siguiendo estas instrucciones
+  estrictas. Formato de salida: para cada archivo, bloque encabezado ### <ruta>
+  seguido de código completo en bloque …. Limítate a los archivos que se listan
+  abajo. No resumas.
+
+  ### Contexto actual
+
+  - Monorepo con backend FastAPI (/api/vendors) ya operativo.
+  - Frontend React 18 + TypeScript + Vite + Tailwind; TanStack Router/Query;
+  Vitest + Testing Library.
+  - Rutas existentes: / (clasificación global), /ranking-tecnologia.
+  - VendorTable reutilizable, helpers en src/lib/vendor.ts (parseSpeed,
+  formatSpeed, computeAverage, listTechnologies, computeTechnologyRanking).
+  - TanStack Router usa Route exportado por cada archivo de src/routes.
+
+  ### Objetivo del ciclo
+
+  Implementar la página de detalle de vendor, navegación accesible desde
+  listados, utilidades de formateo (fecha y velocidades), tests que cubran la
+  nueva ruta y helpers. Debe mostrar logo, nombre, fecha formateada, estadística
+  de velocidades, y listado de antenas por tecnología.
+
+  ### Archivos a crear/modificar
+
+  1. frontend/src/lib/vendor.ts
+      - Añadir función formatFoundationDate(epochMs: number): string (fecha
+  legible locale-es, ej. “12 de mayo de 1996”).
+      - Añadir helper normalizeTechnology(value: string): string reutilizado
+  para comparaciones (retorna uppercase).
+      - Añadir util summarizeVendorSpeeds(antennas: Antenna[]) que devuelva
+  { average: number; min: number; max: number } (en Mbps, usa parseSpeed),
+  manejando arrays vacíos (devuelve 0 en todos los campos).
+      - Exportar nuevos helpers y tipos si aplica.
+  2. frontend/src/api/vendors.ts
+      - Exponer selector selectVendorById(vendors: Vendor[], vendorId: string):
+  Vendor | undefined para uso en rutas (pure function exportada).
+      - Asegurar fetchVendors y tipos se mantienen (no breaking changes).
+  3. frontend/src/components/VendorCard.tsx (nuevo)
+      - Props: { vendor: Vendor; summary: ReturnType<typeof
+  summarizeVendorSpeeds> }.
+      - Renderizar logo (img con alt), nombre, fecha (formatFoundationDate),
+  estadísticos (media/mín/max formateados con formatSpeed).
+      - Aplicar Tailwind (rounded-md, shadow, etc.), sin inline styles.
+      - Incluir aria-label o estructura semántica (<dl> o <div> con headings)
+  accesible.
+  4. frontend/src/components/AntennaList.tsx (nuevo)
+      - Props: { antennas: Antenna[] }.
+
+  - Ordenar antenas por tecnología (alphabetic uppercase) y velocidad desc.
+  - Renderizar lista <ul> o <table> (elige tabla con <thead>/<tbody> y <caption>
+  “Antenas disponibles”).
+  - Mostrar tecnología y velocidad formateada (2 decimales). Asegurar key
+  estable.
+  - Estados vacíos: mensaje accesible “Este vendor no tiene antenas
+  registradas.”
+
+  5. frontend/src/routes/vendor-detail.tsx (nuevo)
+      - TanStack route path: '/vendor/$vendorId'.
+      - Uso de useVendorsQuery para obtener data; manejar isLoading, isError
+  (mismos patrones de otras rutas).
+      - Localizar vendor via selectVendorById; si no existe, mostrar alerta
+  accesible “Vendor no encontrado” + link de regreso a /.
+      - Mostrar VendorCard + AntennaList.
+      - Botón Volver (Link TanStack) para regresar a listado global.
+      - Asegurar que errorComponent y pendingComponent se cubren dentro del
+  render (no rely on root error boundary).
+  6. frontend/src/routes/__root.tsx
+      - Añadir enlace nav (opcional) a “Detalle de vendor” como placeholder?
+  NO: en vez de enlace, asegurarse de que Link al detalle desde listas use
+  Link/Navigate (ver sig. punto). Aquí solo asegúrate de que nav existente no
+  se rompe.
+  7. frontend/src/routes/global-ranking.tsx
+      - En la tabla usar Link por vendor a /vendor/${id} (en la celda de
+  nombre). Usa Link de TanStack (@tanstack/react-router), conserva estilos
+  (subrayado al hover). Asegura aria-label descriptivo.
+  8. frontend/src/routes/technology-ranking.tsx
+      - Igual que global: en la tabla, nombre vendor enlaza al detalle.
+      - Mantener caption dinámico.
+  9. frontend/src/main.tsx
+      - Importar Route as VendorDetailRoute y añadirlo al árbol
+  (RootRoute.addChildren([...])).
+  10. Tests (Vitest):
+      - frontend/src/tests/vendor-utils.test.ts
+          - Añadir casos para formatFoundationDate, normalizeTechnology,
+  summarizeVendorSpeeds.
+      - frontend/src/tests/vendor-detail.test.tsx (nuevo)
+          - Config similar a otros tests con QueryClient.
+          - Cobertura: loading, error (mock rejection), vendor encontrado
+  (verifica logo alt, fecha, velocidades min/max), vendor no encontrado (fetch
+  ok, pero id inexistente → muestra mensaje y link de retorno).
+          - Simula click desde lista? No es necesario; testear route en
+  aislamiento.
+      - Actualizar tests existentes si es necesario debido a Link (asegurar se
+  usan RouterProvider con route tree que incluya vendor detail o mock.
+  11. frontend/src/tests/global-ranking.test.tsx y frontend/src/tests/
+  technology-ranking.test.tsx
+      - Ajustar toMatch snapshot? No. Solo actualizar consultas para adaptarse
+  al Link (p.ej. getByRole('link', { name: /Vendor A/ })).
+      - Añadir verificación de href en uno de los tests (asegura navegabilidad).
+
+  ### Requisitos adicionales
+
+  - Mantén tipado estricto; sin any.
+  - Normaliza tecnologías con normalizeTechnology.
+  - No usar useEffect innecesarios; preferir useMemo.
+  - Tailwind, sin inline styles (excepto spinner existente).
+  - Accesibilidad: VendorCard debe usar encabezados o dl. La tabla de antenas
+  debe tener <caption> y scope en headers.
+  - Tests deben mockear fetch por vendor detail similar a otras suites (usa
+  vi.spyOn(global, 'fetch')).
+
+  ### Validación esperada
+
+  - pnpm test --run debe pasar tras cambios.
+  - Navegación manual: desde ranking global/tecnología se puede abrir vendor
+  detail correctamente.
+
+  Entrega únicamente los archivos solicitados en formato especificado.
+```
+**Resumen del resultado:** Se creó la ruta `/vendor/:vendorId` con tarjeta detallada, lista de antenas y enlaces de retorno; los rankings enlazan al detalle y se añadieron helpers (`normalizeTechnology`, `formatFoundationDate`, `summarizeVendorSpeeds`) con pruebas unitarias e integración.  
+**Uso dentro del proyecto:** Cambios en `frontend/src/lib/vendor.ts`, `frontend/src/api/vendors.ts`, `frontend/src/components/VendorCard.tsx`, `frontend/src/components/AntennaList.tsx`, `frontend/src/routes/vendor-detail.tsx`, integraciones en `frontend/src/routes/global-ranking.tsx`, `frontend/src/routes/technology-ranking.tsx`, `frontend/src/components/VendorTable.tsx`, `frontend/src/main.tsx`, más tests en `frontend/src/tests/vendor-utils.test.ts`, `frontend/src/tests/global-ranking.test.tsx`, `frontend/src/tests/technology-ranking.test.tsx` y `frontend/src/tests/vendor-detail.test.tsx`.
+
 ## 📝 Ejemplo de entrada en PROMPTS.md
 ## Interacción 1
 Herramienta/Modelo: ChatGPT – GPT-4o
